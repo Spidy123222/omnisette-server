@@ -21,7 +21,7 @@ jobs:
           profile: minimal
 
       - name: Install additional rust targets
-        run: rustup target add aarch64-unknown-linux-gnu
+        run: rustup target add aarch64-unknown-linux-gnu x86_64-pc-windows-gnu i686-pc-windows-gnu
 
       - name: Cache rust
         uses: Swatinem/rust-cache@v2
@@ -29,16 +29,24 @@ jobs:
       - name: Install cross
         run: cargo install cross
 
-      - name: Build for x86_64
+      - name: Build for Linux x86_64
         run: cargo build --release
 
-      - name: Build for aarch64
+      - name: Build for Linux aarch64
         run: cross build --release --target aarch64-unknown-linux-gnu
+
+      - name: Build for Windows x86_64
+        run: cross build --release --target x86_64-pc-windows-gnu
+
+      - name: Build for Windows x86
+        run: cross build --release --target i686-pc-windows-gnu
 
       - name: Move and rename binaries
         run: |
           cp target/release/omnisette-server target/omnisette-server-linux-x86_64
           cp target/aarch64-unknown-linux-gnu/release/omnisette-server target/omnisette-server-linux-aarch64
+          cp target/x86_64-pc-windows-gnu/release/omnisette-server target/omnisette-server-windows-x86_64
+          cp target/i686-pc-windows-gnu/release/omnisette-server target/omnisette-server-windows-x86
 
       - name: Upload to new release
         uses: softprops/action-gh-release@v1
@@ -49,6 +57,8 @@ jobs:
           files: |
             target/omnisette-server-linux-x86_64
             target/omnisette-server-linux-aarch64
+            target/omnisette-server-windows-x86_64
+            target/omnisettr-server-windows-x86
           body: |
             ## Changelog
 

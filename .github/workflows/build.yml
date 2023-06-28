@@ -24,7 +24,7 @@ jobs:
           profile: minimal
           
       - name: Install Dep's
-        run: apt-get install --assume-yes --no-install-recommends g++-mingw-w64-x86-64 libz-mingw-w64-dev
+        run: sudo dpkg --add-architecture i386 && sudo apt-get install --assume-yes --no-install-recommends g++-mingw-w64-x86-64 libz-mingw-w64-dev
 
       - name: Install additional rust targets
         run: rustup target add aarch64-unknown-linux-gnu x86_64-pc-windows-gnu i686-pc-windows-gnu

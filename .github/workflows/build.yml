@@ -70,9 +70,6 @@ jobs:
           toolchain: stable
           profile: minimal
           
-      - name: Install additional rust targets
-        run: rustup target add i686-pc-windows-gnu
-
       - name: Cache rust
         uses: Swatinem/rust-cache@v2
 
@@ -81,14 +78,9 @@ jobs:
 
       - name: Build for x86_64
         run: cargo build --release
-
-      - name: Build for x86
-        run: cross build --release --target i686-pc-windows-gnu
         
       - name: Move and rename binaries
-        run: |
-          cp target/release/omnisette-server target/omnisette-server-windows-x86_64
-          cp target/i686-pc-windows-gnu/release/omnisette-server target/omnisette-server-windows-x86
+        run: cp target/release/omnisette-server target/omnisette-server-windows-x86_64
       
       - name: Upload to new release
         uses: softprops/action-gh-release@v1
@@ -98,7 +90,7 @@ jobs:
           tag_name: ${{ github.ref_name }}
           files: |
             target/omnisette-server-windows-x86_64
-            target/omnisette-server-windows-x86
+            
           body: |
             ## Changelog
 
